@@ -18,15 +18,10 @@
 class PCalc_T : public PCalc {
     public:
         PCalc_T(unsigned int array_size, unsigned int threads);
-        //~PCalc_SP();
 
         void primeThread(int i);
         void markNonPrimes();
         void createThread(int i);
-
-        //void cleanup();
-
-    protected:
 
     private:
         unsigned int numThreads;

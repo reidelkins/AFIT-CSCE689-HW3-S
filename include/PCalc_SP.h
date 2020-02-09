@@ -13,19 +13,8 @@
 class PCalc_SP : public PCalc {
     public:
         PCalc_SP(unsigned int array_size);
-        //~PCalc_SP();
 
         void markNonPrimes();
-
-        //void cleanup();
-
-
-
-
-
-    protected:
-
-    private:
 
 };
 

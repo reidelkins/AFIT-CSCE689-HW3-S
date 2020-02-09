@@ -11,6 +11,8 @@
 
 PCalc_T::PCalc_T(unsigned int array_size, unsigned int threads):PCalc(array_size) {
     this->numThreads = threads;
+    //creates a mutex semaphore for each element in our number array
+    //so that element can be locked if it needs to be overwritten
     mtx = std::vector<std::mutex> (array_size);
     
 }
@@ -20,6 +22,9 @@ void PCalc_T::markNonPrimes() {
     
     for(int i = 2; i < sqrt(this->array_size()); i++) {
         if(this->at(i)) {
+            //creates the max number of threads, sends them off to do work
+            //when they return they join back and if there is more work
+            //it continues to loop through this process
             if(this->threadsRunning == this->numThreads) {
                 for(int j = 0; j < this->numThreads; j++) {
                     if(vThreads.at(j).joinable()) {
@@ -35,6 +40,7 @@ void PCalc_T::markNonPrimes() {
 
         }
     }
+    //join any threads left
     for(int i = 0; i < vThreads.size(); i++) {
         if(vThreads.at(i).joinable())
             vThreads.at(i).join();
@@ -49,7 +55,10 @@ void PCalc_T::createThread(int i) {
 
 void PCalc_T::primeThread(int i) {
     for(int j = pow(i, 2); j < this->array_size(); j = j+i) {
+        //could possibly be quicker if didn't have this check
+        //I do not think so though
         if(this->at(j)) {
+            //waits until can lock an element, then changes it and unlocks it
             while(!mtx[i].try_lock());
                 this->at(j) = false;
                 mtx[i].unlock();
