@@ -1,6 +1,10 @@
 #ifndef PCALC_T_H
 #define PCALC_T_H
 
+#include <vector>
+#include <thread>
+#include <mutex>
+
 #include "PCalc.h"
 
 // Your implementation of PCalc_T class should go here. 
@@ -10,5 +14,26 @@
 
 // Call the parent constructor when initializing your constructor and pass in array_size. Then
 // use num_threads to cap off how many threads you use to calculate all prime numbers
+
+class PCalc_T : public PCalc {
+    public:
+        PCalc_T(unsigned int array_size, unsigned int threads);
+        //~PCalc_SP();
+
+        void primeThread(int i);
+        void markNonPrimes();
+        void createThread(int i);
+
+        //void cleanup();
+
+    protected:
+
+    private:
+        unsigned int numThreads;
+        unsigned int threadsRunning = 0;
+        std::vector<std::thread> vThreads;
+        std::vector<std::mutex> mtx;
+
+};
 
 #endif
